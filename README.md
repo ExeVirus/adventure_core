@@ -41,7 +41,7 @@ Built-in ones, 6 static mesh nodes:
 2. Bozai Tree
 3. Rune thing from adventure_pack
 4. Bonfire
-5. Lampost
+5. Castle Flag
 6. Axe Stump
 
 ------
