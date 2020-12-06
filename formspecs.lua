@@ -15,6 +15,8 @@ end
 
 -- Store Formspec, with search functionality
 function adv_core.store_formspec(name, page, search, selected)
+--how to sort:
+--https://stackoverflow.com/questions/17436947/how-to-iterate-through-table-in-lua
 	-- Display Pouch, left side panel
 	-- Search bar, middle-bottom of right half
 	-- Grid of options. right half

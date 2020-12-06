@@ -9,9 +9,13 @@
 -- See https://github.com/ExeVirus/adventure_core/wiki for more information
 
 adv_core={} --contains all functions and global variables
+adv_core.mod_storage = minetest.get_mod_storage()
 
 -- Settings
 dofile(minetest.get_modpath("adventure_core").."/settings.lua")
+
+-- Register the element entities
+dofile(minetest.get_modpath("adventure_core").."/elements.lua")
 
 -- API for this and other mods
 -- (reward player with elements, pay with elements, register nodes to purchase for shop, etc.)
@@ -20,7 +24,7 @@ dofile(minetest.get_modpath("adventure_core").."/api.lua")
 -- Formspecs (guide,store,pouch)
 dofile(minetest.get_modpath("adventure_core").."/formspecs.lua")
 
--- Register the 4 Elements, Built-in Nodes
+-- Register the Built-in Nodes
 dofile(minetest.get_modpath("adventure_core").."/register.lua")
 
 -- Spawning, including player spawning items

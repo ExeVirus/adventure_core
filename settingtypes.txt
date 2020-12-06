@@ -18,6 +18,9 @@ adventure_core.element_lifetime (Element Lifetime [s]) int 60 0 200
 #Enable Element Particles
 adventure_core.enable_element_particles (Enable Element Particles) bool true
 
+#Enable Element Sounds
+adventure_core.enable_element_sounds (Enable Element Sounds) bool true
+
 #Give Players the starting guidebook and pouch
 adventure_core.enable_starting_items (Enable Starting Items) bool true
 
