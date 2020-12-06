@@ -1,0 +1,47 @@
+# This file contains the various settings for adventure core
+
+#Spawn Location (x,y,z)
+adventure_core.spawn_location (Spawn Location) v3f (0.0, 0.0, 0.0)
+
+#Enable or disable craftability of adventure_shop
+adventure_core.enable_adventure_shop (Craftable Adventure Shop) bool true
+
+#Enable or disable chat_command usage
+adventure_core.enable_chat_commands (Enable Chat Commands) bool true
+
+#Spawn elements according to biome (if default is present) [random otherwise]
+adventure_core.enable_spawn_biome (Spawns based on Biomes) bool true
+
+#Element Lifetime, in seconds. [0-200]
+adventure_core.element_lifetime (Element Lifetime [s]) int 60 0 200
+
+#Enable Element Particles
+adventure_core.enable_element_particles (Enable Element Particles) bool true
+
+#Give Players the starting guidebook and pouch
+adventure_core.enable_starting_items (Enable Starting Items) bool true
+
+#Enable Built-in Nodes (bridge, bonzai tree, etc)
+adventure_core.enable_builtin_nodes (Enable Builtin Nodes) bool true
+
+#Base time between element spawns in seconds. Per player value. [40-3600]
+adventure_core.base_time_between_spawns (Base Time Between Spawns) int 80 40 3600
+
+#Time Spread between element spawns, in seconds, randomly between (-value, +value) [0-30]
+adventure_core.spawn_time_spread (Time Spread Between Spawns) int 15 0 30
+
+#Distance (in nodes) from spawn where elements spawn at base value [0-100,000]
+adventure_core.base_distance (Distance to base spawn rate from spawn) int 500 0 100000
+
+#Time, in seconds, for how much more (or less) time it takes for elements spawn 
+#when player distance to spawn is less than base_distance 
+adventure_core.spawn_adjustment_time (Extra time between element spawns near player spawn point) int 180
+
+#Distance Spawn Time Reduction. For every 1000 nodes away from the base_distance boundary
+#decrease (or increase, if negative) the element spawn time by this many seconds
+adventure_core.distance_adjustment_time (Distance Reduction amount (in seconds) int 2
+
+#Minimum spawn time per player for an element [1-3600]
+adventure_core.minimum_spawn_time (Minimum time between spawns) int 30 1 3600
+
+
