@@ -12,14 +12,14 @@ adventure_core.enable_chat_commands (Enable Chat Commands) bool true
 #Spawn elements according to biome (if default is present) [random otherwise]
 adventure_core.enable_spawn_biome (Spawns based on Biomes) bool true
 
+#Spawn elements within this distance of player (in nodes0
+adventure_core.distance_from_player (Element Max Distance From Player) int 12 1 40
+
 #Element Lifetime, in seconds. [0-200]
 adventure_core.element_lifetime (Element Lifetime [s]) int 60 0 200
 
 #Enable Element Particles
 adventure_core.enable_element_particles (Enable Element Particles) bool true
-
-#Enable Element Sounds
-adventure_core.enable_element_sounds (Enable Element Sounds) bool true
 
 #Give Players the starting guidebook and pouch
 adventure_core.enable_starting_items (Enable Starting Items) bool true

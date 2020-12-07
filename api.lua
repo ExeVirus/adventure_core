@@ -1,7 +1,7 @@
 -- API
 
-local function load_pouch(name)
-	local pouch = minetest.deserialize(adv_core.mod_storage:get_string(tostring(name)))
+function adv_core.load_pouch(name)
+	local pouch = minetest.deserialize(adv_core.mod_storage:get_string(tostring(name) .. "pouch"))
 	
 	--init if nil
 	if pouch == nil then
@@ -12,7 +12,7 @@ local function load_pouch(name)
 			air   = 0,
 		}
 		--store it back
-		adv_core.mod_storage:set_string(player_name, minetest.serialize(pouch))
+		adv_core.mod_storage:set_string(name .. "pouch", minetest.serialize(pouch))
 	end
 	
 	return pouch
@@ -26,7 +26,7 @@ function adv_core.player_can_afford_object(name, object_name)
 	end
 	
 	--load player pouch
-    local player_pouch = load_pouch(name)
+    local player_pouch = adv_core.load_pouch(name)
 	
 	local fire_ok  = player_pouch.fire  >= objectTable.object_name.fire
 	local water_ok = player_pouch.water >= objectTable.object_name.water
@@ -43,7 +43,7 @@ end
 
 function adv_core.player_can_afford(name, fire, water, earth, air)
 	--load player pouch
-    local player_pouch = load_pouch(name)
+    local player_pouch = adv_core.load_pouch(name)
 	
 	local fire_ok  = player_pouch.fire  >= fire
 	local water_ok = player_pouch.water >= water
@@ -59,7 +59,7 @@ end
 -- (reward player with elements, pay with elements, register nodes to purchase for shop)
 
 function adv_core.reward_player(name, fire, water, earth, air, notify)
-	local player_pouch = load_pouch(name)
+	local player_pouch = adv_core.load_pouch(name)
 	
 	player_pouch.fire  = player_pouch.fire  + fire
 	player_pouch.water = player_pouch.water + water
@@ -82,7 +82,7 @@ function adv_core.reward_player(name, fire, water, earth, air, notify)
 end
 
 function adv_core.take_from_player(name, fire, water, earth, air)
-	local player_pouch = load_pouch(name)
+	local player_pouch = adv_core.load_pouch(name)
 	
 	--Don't reduce below zero, that's silly
 	

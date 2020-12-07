@@ -36,7 +36,7 @@ end
 local function reward_player(player_name, element_type)
 	if player_name ~= "" then
 		--load player pouch
-		local player_pouch = minetest.deserialize(adv_core.mod_storage:get_string(player_name))
+		local player_pouch = minetest.deserialize(adv_core.mod_storage:get_string(player_name .. "pouch"))
 		
 		--init, if nil
 		if player_pouch == nil then
@@ -67,12 +67,8 @@ local function reward_player(player_name, element_type)
 				minetest.get_color_escape_sequence("yellow") .. "  Air: "   .. player_pouch.air)
 		end
 		
-		if adv_core.setting("enable_element_sounds", true) then
-			minetest.sound_play("adv_core_capture", {to_player = player_name, gain=0.5})
-		end
-		
 		--store it back
-		adv_core.mod_storage:set_string(player_name, minetest.serialize(player_pouch))
+		adv_core.mod_storage:set_string(player_name .. "pouch", minetest.serialize(player_pouch))
 	end
 end
 
@@ -99,9 +95,7 @@ local fire_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			self.particles = create_particles(self.object:get_pos(), "fire")
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
-		end
+		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
 		self.lifetime = minetest.get_us_time() + adv_core.setting("element_lifetime", 60)*1000000
 	end,
 	
@@ -111,9 +105,7 @@ local fire_element_def = {
 			if adv_core.setting("enable_element_particles", true) then
 				minetest.delete_particlespawner(self.particles)
 			end
-			if adv_core.setting("enable_element_sounds", true) then
-				minetest.sound_stop(self.sound)
-			end
+			minetest.sound_stop(self.sound)
 		end
 	end,
 	
@@ -123,9 +115,7 @@ local fire_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			minetest.delete_particlespawner(self.particles)
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			minetest.sound_stop(self.sound)
-		end
+		minetest.sound_stop(self.sound)
 	end,
 	
 	on_punch = function(self, puncher)
@@ -134,9 +124,7 @@ local fire_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			minetest.delete_particlespawner(self.particles)
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			minetest.sound_stop(self.sound)
-		end
+		minetest.sound_stop(self.sound)
 	end,
 }
 minetest.register_entity("adventure_core:fire_element", fire_element_def)
@@ -164,9 +152,7 @@ local water_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			self.particles = create_particles(self.object:get_pos(), "water")
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
-		end
+		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
 		self.lifetime = minetest.get_us_time() + adv_core.setting("element_lifetime", 60)*1000000
 	end,
 	
@@ -176,9 +162,7 @@ local water_element_def = {
 			if adv_core.setting("enable_element_particles", true) then
 				minetest.delete_particlespawner(self.particles)
 			end
-			if adv_core.setting("enable_element_sounds", true) then
-				minetest.sound_stop(self.sound)
-			end
+			minetest.sound_stop(self.sound)
 		end
 	end,
 	
@@ -188,9 +172,7 @@ local water_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			minetest.delete_particlespawner(self.particles)
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			minetest.sound_stop(self.sound)
-		end
+		minetest.sound_stop(self.sound)
 	end,
 	
 	on_punch = function(self, puncher)
@@ -199,9 +181,7 @@ local water_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			minetest.delete_particlespawner(self.particles)
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			minetest.sound_stop(self.sound)
-		end
+		minetest.sound_stop(self.sound)
 	end,
 }
 minetest.register_entity("adventure_core:water_element", water_element_def)
@@ -229,9 +209,7 @@ local earth_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			self.particles = create_particles(self.object:get_pos(), "earth")
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
-		end
+		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
 		self.lifetime = minetest.get_us_time() + adv_core.setting("element_lifetime", 60)*1000000
 	end,
 	
@@ -241,9 +219,7 @@ local earth_element_def = {
 			if adv_core.setting("enable_element_particles", true) then
 				minetest.delete_particlespawner(self.particles)
 			end
-			if adv_core.setting("enable_element_sounds", true) then
-				minetest.sound_stop(self.sound)
-			end
+			minetest.sound_stop(self.sound)
 		end
 	end,
 	
@@ -253,9 +229,7 @@ local earth_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			minetest.delete_particlespawner(self.particles)
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			minetest.sound_stop(self.sound)
-		end
+		minetest.sound_stop(self.sound)
 	end,
 	
 	on_punch = function(self, puncher)
@@ -264,9 +238,7 @@ local earth_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			minetest.delete_particlespawner(self.particles)
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			minetest.sound_stop(self.sound)
-		end
+		minetest.sound_stop(self.sound)
 		return true
 	end,
 }
@@ -295,9 +267,7 @@ local air_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			self.particles = create_particles(self.object:get_pos(), "air")
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
-		end
+		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
 		self.lifetime = minetest.get_us_time() + adv_core.setting("element_lifetime", 60)*1000000
 	end,
 	
@@ -307,9 +277,7 @@ local air_element_def = {
 			if adv_core.setting("enable_element_particles", true) then
 				minetest.delete_particlespawner(self.particles)
 			end
-			if adv_core.setting("enable_element_sounds", true) then
-				minetest.sound_stop(self.sound)
-			end
+			minetest.sound_stop(self.sound)
 		end
 	end,
 	
@@ -319,9 +287,7 @@ local air_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			minetest.delete_particlespawner(self.particles)
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			minetest.sound_stop(self.sound)
-		end
+		minetest.sound_stop(self.sound)
 	end,
 	
 	on_punch = function(self, puncher)
@@ -330,9 +296,7 @@ local air_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			minetest.delete_particlespawner(self.particles)
 		end
-		if adv_core.setting("enable_element_sounds", true) then
-			minetest.sound_stop(self.sound)
-		end
+		minetest.sound_stop(self.sound)
 	end,
 }
 minetest.register_entity("adventure_core:air_element", air_element_def)
