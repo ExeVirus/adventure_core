@@ -113,10 +113,24 @@ function adv_core.store_formspec(name, page, search, selected)
 --https://stackoverflow.com/questions/17436947/how-to-iterate-through-table-in-lua
 	-- Display Pouch, left side panel
 	-- Search bar, middle-bottom of right half
+    -- Reset Search, bottom right corner
 	-- Grid of options. right half
-	-- Paging arrows <->, bottom of right half
+	-- Paging arrows <->, middle left and right of right half
 	-- Selected item, and cost, left half
-	-- Create Button, bottom of left half.
+	-- Create Button, bottom middle of left half.
+    
+    
+    -- Number of pages is always the same, search function will separate them into
+    -- a group of matched and the rest in unmatched.
+    -- Then it will display *both* sets in alphabetical order, matching first.
+    -- Matching are displayed with a light-blue background box around them.
+    
+    -- if stinrg.find("search") == nil then
+            --place in unmatched
+    -- else
+            --place in matched
+    -- end
+
 end
 
 -- formspec callbacks
