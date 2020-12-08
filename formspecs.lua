@@ -111,8 +111,28 @@ end
 function adv_core.store_formspec(name, page, search, selected)
 --how to sort:
 --https://stackoverflow.com/questions/17436947/how-to-iterate-through-table-in-lua
-	-- Display Pouch, left side panel
-	-- Search bar, middle-bottom of right half
+
+	local formspec = {
+        "formspec_version[3]",
+        "size[16,12]",
+		"position[0.5,0.5]",
+		"anchor[0.5,0.5]",
+		"no_prepend[]",
+		--background
+		"bgcolor[#866f4c;both;#00000080]",
+		"box[0.2,0.2;15.6,11.6;#dec29cFF]",
+		--pouch
+		"box[0.3,2.4;0.6,6.6;#564222FF]",
+		"image[0.4,2.6;0.4,0.4;pouch.png]",
+		"image[0.35,3.2;0.5,0.5;fire.png]",
+		"image[0.35,4.6;0.5,0.5;water.png]",
+		"image[0.35,6.0;0.5,0.5;earth.png]",
+		"image[0.35,7.4;0.5,0.5;air.png]",
+		--Search Bar
+		"field[10.0,10;4,0.6;search;;]",
+		"image_button[14.1,10;0.6,0.6;magnify.png;do_search;]",
+		"image_button[14.8,10;0.6,0.6;reset.png;do_search;]",
+	}
     -- Reset Search, bottom right corner
 	-- Grid of options. right half
 	-- Paging arrows <->, middle left and right of right half
@@ -130,7 +150,7 @@ function adv_core.store_formspec(name, page, search, selected)
     -- else
             --place in matched
     -- end
-
+	return table.concat(formspec, "")
 end
 
 -- formspec callbacks
