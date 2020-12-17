@@ -1,5 +1,9 @@
 -- REGISTER
 
+adv_core.register_object("default:dirt", 0, 0, 1, 0)
+adv_core.register_object("default:dirt_with_grass", 0, 1, 1, 0)
+adv_core.register_object("default:water", 0, 1, 0, 0)
+
 -- ---Register the round rock
 -- minetest.register_node("rocks:".. name .."_round", {
 	-- description = "Round " .. name .. " Rock",

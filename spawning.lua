@@ -101,71 +101,66 @@ local function spawn_element(player, with_biomes)
 	end
 end
 
-
+local total_time = 0
 minetest.register_globalstep(function(dtime)
-	local new_time = minetest.get_us_time()
-	local old_time = tonumber(adv_core.mod_storage:get_string("time"))
-	if old_time ~= nil then
-		--Every second:
-		if old_time + 1000000 < new_time then	
-			for _,player in ipairs(minetest.get_connected_players()) do
-				local name = player:get_player_name()
-				local player_old_time = tonumber(adv_core.mod_storage:get_string(name .. "old_time")) 
-				if player_old_time == nil then
-					adv_core.mod_storage:set_string(name .. "old_time", new_time)
-					player_old_time = new_time
-				end
-				local player_countdown = tonumber(adv_core.mod_storage:get_string(name .. "countdown")) or init_time
-				minetest.chat_send_all("old_time: " .. player_old_time .. "countdown: " .. player_countdown)
-				
-				if player_old_time + player_countdown < new_time then
-					minetest.chat_send_all("attempting spawn")
-					local spawned = nil
-					if biome_spawns and default_en then
-						spawned = spawn_element(player, true)
-					else
-						spawned = spawn_element(player, false)
-					end
-					if spawned then
-						minetest.chat_send_all("spawn_successful")
-						local countdown = time_between + math.random(-spread,spread)
-						local dist = vector.distance(player:get_pos(), spawn_point)
-						if dist > base_dist then
-							countdown = countdown - math.floor(base_dist / 1000) * dist_adjust
-						else
-							countdown = countdown + spawn_adjust
-						end
-						adv_core.mod_storage:set_string(name .. "countdown", 3000000)--math.max(countdown, min_time) * 1000000)
-					else
-						minetest.chat_send_all("spawn_unsuccessful")
-						adv_core.mod_storage:set_string(name .. "countdown", 1000000) -- try again in 1 seconds...
-					end
-					adv_core.mod_storage:set_string(name .. "old_time", new_time)
-				end
+	total_time = total_time + dtime
+	if total_time > 1 then -- every second
+		total_time = 0
+		local new_time = minetest.get_us_time()
+		for _,player in ipairs(minetest.get_connected_players()) do
+			local name = player:get_player_name()
+			local player_old_time = tonumber(adv_core.mod_storage:get_string(name .. "old_time")) 
+			if player_old_time == nil then
+				adv_core.mod_storage:set_string(name .. "old_time", new_time)
+				player_old_time = new_time
 			end
-			adv_core.mod_storage:set_string("time",tostring(new_time))
+			local player_countdown = tonumber(adv_core.mod_storage:get_string(name .. "countdown")) or init_time
+			minetest.chat_send_all("old_time: " .. player_old_time .. "countdown: " .. player_countdown)
+			
+			if player_old_time + player_countdown < new_time then
+				minetest.chat_send_all("attempting spawn")
+				local spawned = nil
+				if biome_spawns and default_en then
+					spawned = spawn_element(player, true)
+				else
+					spawned = spawn_element(player, false)
+				end
+				if spawned then
+					minetest.chat_send_all("spawn_successful")
+					local countdown = time_between + math.random(-spread,spread)
+					local dist = vector.distance(player:get_pos(), spawn_point)
+					if dist > base_dist then
+						countdown = countdown - math.floor(base_dist / 1000) * dist_adjust
+					else
+						countdown = countdown + spawn_adjust
+					end
+					adv_core.mod_storage:set_string(name .. "countdown", 3000000)--math.max(countdown, min_time) * 1000000)
+				else
+					minetest.chat_send_all("spawn_unsuccessful")
+					adv_core.mod_storage:set_string(name .. "countdown", 1000000) -- try again in 1 seconds...
+				end
+				adv_core.mod_storage:set_string(name .. "old_time", new_time)
+			end
 		end
-	else
-		adv_core.mod_storage:set_string("time",tostring(new_time))
 	end
 end)
 
---Do players respawn/spawn with a guidebook and pouch?
-if adv_core.setting("enable_starting_items", true) then
-	minetest.register_on_newplayer(function(playerRef)
-		local inv = player:get_inventory()
-		local main = inv:get_list("main")
-		--for loop through main stacks
-			--check if empty
-				--add guidebook
-				--break
-		--for loop though main stacks
-			--check if empty
-				--add pouch
-				--break
-	end
-	)
-end
+-- --Do players respawn/spawn with a guidebook and pouch?
+-- if adv_core.setting("enable_starting_items", true) then
+	-- minetest.register_on_newplayer(function(playerRef)
+		-- local inv = player:get_inventory()
+		-- local main = inv:get_list("main")
+		-- --for loop through main stacks
+			-- --check if empty
+				-- --add guidebook
+				-- --break
+		-- --for loop though main stacks
+			-- --check if empty
+				-- --add pouch
+				-- --break
+	-- end
+	-- )
+-- end
 
 
 

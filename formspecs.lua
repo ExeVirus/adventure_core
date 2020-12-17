@@ -24,7 +24,7 @@ function adv_core.guide_formspec(name)
 		"box[4.87,2.77;0.41,0.4;#00000030]", --air
 		"image[2.8,5.2;0.5,0.5;fire.png]",
 		"button[6.12,4.24;1.5,0.5;play;This Sound]",
-		"style[label;font=mono]",
+		"style_type[label;noclip=true]",
 		"label[1,2;",black,
 		"-----------   Adventure Core is a discovery mod!   -----------\n", black,
 		"]",
@@ -111,7 +111,12 @@ end
 function adv_core.store_formspec(name, page, search, selected)
 --how to sort:
 --https://stackoverflow.com/questions/17436947/how-to-iterate-through-table-in-lua
-
+	local objectTable = minetest.deserialize(adv_core.mod_storage:get_string("objectTable")) or {}
+	local num_pages = adv_core.get_num_pages()
+	local num_objects = adv_core.get_num_objects()
+	
+	minetest.chat_send_all("Objects: " .. num_objects)
+	
 	local formspec = {
         "formspec_version[3]",
         "size[16,12]",
@@ -129,27 +134,105 @@ function adv_core.store_formspec(name, page, search, selected)
 		"image[0.35,6.0;0.5,0.5;earth.png]",
 		"image[0.35,7.4;0.5,0.5;air.png]",
 		--Search Bar
-		"field[10.0,10;4,0.6;search;;]",
-		"image_button[14.1,10;0.6,0.6;magnify.png;do_search;]",
-		"image_button[14.8,10;0.6,0.6;reset.png;do_search;]",
-	}
-    -- Reset Search, bottom right corner
-	-- Grid of options. right half
-	-- Paging arrows <->, middle left and right of right half
-	-- Selected item, and cost, left half
-	-- Create Button, bottom middle of left half.
-    
+		"field[9.0,10;6,0.6;search;;]",
+		"image_button[14.1,10;0.6,0.6;search.png;do_search;]",
+		"image_button[14.8,10;0.6,0.6;clear.png;reset_search;]",
+		--Paging
+		"label[11,1;Page ", page , " of " , num_pages , "]",
+		"image_button[11.3,0.2;0.6,0.6;prev.png;next_page;]",
+		"image_button[12.3,0.2;0.6,0.6;next.png;previous_page;]",
+		}
+		
+		if num_objects > 0 then			
+			local matched = {}
+			local unmatched = {}
+			if search ~= nil and search ~= "" then
+				--Separate
+				for object in pairs(objectTable) do
+					if string.find(object, search) == nil then
+						unmatched[#unmatched+1] = object
+					else
+						matched[#matched+1] = object
+					end
+				end
+				--Sort A-Z
+				table.sort(unmatched);
+				table.sort(matched);
+				
+				local num_matched = #matched
+				--Add unmatched to matched
+				for i = 1, #unmatched do
+					matched[#matched+1] = unmatched[i]
+				end
+				
+				local defs = minetest.registered_nodes
+				for i = (page-1)*72+1, math.min(page*72+1,#matched) do
+					local index = i - (page-1)*72-1 --index is for finding row-column
+					local row = math.floor(index / 6)
+					local column = index - row*6
+					if i < (num_matched+2) then
+						--Display Blue
+						formspec[#formspec+1] = "item_image_button[column*0.6+9,row*0.6+2;0.5,0.5;"
+						formspec[#formspec+1] = matched[i] 
+						formspec[#formspec+1] = ";select;"
+						formspec[#formspec+1] = matched[i]
+						formspec[#formspec+1] = ";],"
+						
+					else
+						--Display Normal
+						formspec[#formspec+1] = "item_image_button[column*0.6+9,row*0.6+2;0.5,0.5;"
+						formspec[#formspec+1] = matched[i] 
+						formspec[#formspec+1] = ";select;"
+						formspec[#formspec+1] = matched[i]
+						formspec[#formspec+1] = ";],"
+					end
+					--table.concat(formspec, "image_button[row*0.6,column*0.6;0.5,0.5;" .. node_def[object].inv_img .. ";select;".. object .."],")
+					--table.concat(formspec, "tooltip[blah;blah],")
+				end
+			else --Display Normally
+				minetest.chat_send_all("Normal List")
+				for object in pairs(objectTable) do
+					minetest.chat_send_all(object)
+					unmatched[#unmatched+1] = object
+				end
+				table.sort(unmatched);
+				minetest.chat_send_all(#unmatched)
+				
+				for i = (page-1)*72+1, math.min(page*72+1,#unmatched) do
+					local index = i - (page-1)*72-1 --index is for finding row-column
+					minetest.chat_send_all(index)
+					local row = math.floor(index / 6)
+					local column = index - row*6
+					--Display Normal
+					formspec[#formspec+1] = "item_image_button[column*0.6+9,row*0.6+2;0.5,0.5;"
+					formspec[#formspec+1] = matched[i] 
+					formspec[#formspec+1] = ";select;"
+					formspec[#formspec+1] = matched[i]
+					formspec[#formspec+1] = ";],"
+				end
+			end
+		end
+		
+		
+		
+		
+		--Columns and Rows of objects
+			--Get object list
+			--Perform Search, if applicable.
+			--Recombine the matched and unmatched object groups after sorting a-z.
+			--Display current page of objects as from starting page value to either end of array or end of page value
+			
+		--Selected Item Display
+	    if objectTable.selected ~= nil then
+			--Show item
+			--Show Cost
+			--Show "Create" button
+		end
     
     -- Number of pages is always the same, search function will separate them into
     -- a group of matched and the rest in unmatched.
     -- Then it will display *both* sets in alphabetical order, matching first.
     -- Matching are displayed with a light-blue background box around them.
-    
-    -- if stinrg.find("search") == nil then
-            --place in unmatched
-    -- else
-            --place in matched
-    -- end
 	return table.concat(formspec, "")
 end
 

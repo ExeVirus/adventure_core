@@ -106,9 +106,12 @@ function adv_core.take_from_player(name, fire, water, earth, air)
 	end
 end
 
+local num_pages = 0
+local num_objects = 0
+
 function adv_core.register_object(object_name, lfire, lwater, learth, lair)
 	local objectTable = minetest.deserialize(adv_core.mod_storage:get_string("objectTable")) or {}
-	
+	if objectTable.num_objects == nil then objectTable.num_objects = 0  end
 	--if object name is taken, Error out
 	if objectTable.object_name ~= nil then
 		minetest.log("Unable to add " .. object_name .. " to adventure core object list, name already taken")
@@ -122,8 +125,21 @@ function adv_core.register_object(object_name, lfire, lwater, learth, lair)
 		earth = learth,
 		air = lair,	
 	}
+	objectTable.num_objects = objectTable.num_objects+1
 
+	adv_core.mod_storage:set_string("objectTable", minetest.serialize(objectTable))
 	return true
+end
+
+function adv_core.get_num_pages()
+	--get number of registered objects
+	num_pages = math.floor(num_objects / 6 / 12) + 1
+	
+	return num_pages
+end
+
+function adv_core.get_num_objects()
+	return num_objects
 end
 
 --"fire","water","earth","air"
