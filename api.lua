@@ -18,21 +18,20 @@ function adv_core.load_pouch(name)
 	return pouch
 end
 
-
 function adv_core.player_can_afford_object(name, object_name)
-	local objectTable = minetest.deserialize(adv_core.mod_storage:get_string("objectTable")) or {}
-	if objectTable.object_name == nil then
+	local objectTable = adv_core.objectTable or {}
+	if objectTable[object_name] == nil then
 		return false
 	end
 	
 	--load player pouch
     local player_pouch = adv_core.load_pouch(name)
 	
-	local fire_ok  = player_pouch.fire  >= objectTable.object_name.fire
-	local water_ok = player_pouch.water >= objectTable.object_name.water
-	local earth_ok = player_pouch.earth >= objectTable.object_name.earth
-	local water_ok = player_pouch.air   >= objectTable.object_name.air
-	
+	local fire_ok  = player_pouch.fire  >= objectTable[object_name].fire
+	local water_ok = player_pouch.water >= objectTable[object_name].water
+	local earth_ok = player_pouch.earth >= objectTable[object_name].earth
+	local air_ok = player_pouch.air   >= objectTable[object_name].air
+    
 	if fire_ok and water_ok and earth_ok and air_ok then
 		return true
 	else
@@ -106,40 +105,24 @@ function adv_core.take_from_player(name, fire, water, earth, air)
 	end
 end
 
-local num_pages = 0
-local num_objects = 0
-
+adv_core.num_objects = 0
+adv_core.objectTable = {}
 function adv_core.register_object(object_name, lfire, lwater, learth, lair)
-	local objectTable = minetest.deserialize(adv_core.mod_storage:get_string("objectTable")) or {}
-	if objectTable.num_objects == nil then objectTable.num_objects = 0  end
 	--if object name is taken, Error out
-	if objectTable.object_name ~= nil then
-		minetest.log("Unable to add " .. object_name .. " to adventure core object list, name already taken")
+	if adv_core.objectTable[object_name] ~= nil then
+		minetest.log("error","Unable to add " .. object_name .. " to adventure core object list, name already taken")
 		return false
 	end
 	
 	--add to table
-	objectTable.object_name = {
+	adv_core.objectTable[object_name] = {
 		fire = lfire,
 		water = lwater,
 		earth = learth,
 		air = lair,	
 	}
-	objectTable.num_objects = objectTable.num_objects+1
-
-	adv_core.mod_storage:set_string("objectTable", minetest.serialize(objectTable))
+	adv_core.num_objects = adv_core.num_objects+1
 	return true
-end
-
-function adv_core.get_num_pages()
-	--get number of registered objects
-	num_pages = math.floor(num_objects / 6 / 12) + 1
-	
-	return num_pages
-end
-
-function adv_core.get_num_objects()
-	return num_objects
 end
 
 --"fire","water","earth","air"
@@ -153,4 +136,12 @@ function adv_core.spawn_element(element_type, pos)
 	elseif element_type == "air" then
 		minetest.add_entity(pos, "adventure_core:air_element", nil)
 	end
+end
+
+--Credit to Unified Inventory for how to fix this:
+function adv_core.escape_for_formspec(item_name)
+	return string.gsub(item_name, "([^A-Za-z0-9])", function (c) return string.format("_%d_", string.byte(c)) end)
+end
+function adv_core.remove_formspec_escapes(item_name)
+	return string.gsub(item_name, "_([0-9]+)_", function (v) return string.char(v) end)
 end

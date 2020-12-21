@@ -64,7 +64,7 @@ local function reward_player(player_name, element_type)
 		elseif element_type == "air" then
 			player_pouch.air = player_pouch.air + 1
 			minetest.chat_send_player(player_name, 
-				minetest.get_color_escape_sequence("yellow") .. "  Air: "   .. player_pouch.air)
+				minetest.get_color_escape_sequence("yellow") .. "  air: "   .. player_pouch.air)
 		end
 		
 		--store it back

@@ -10,7 +10,7 @@ if adv_core.setting("enable_chat_commands",true) then
 			privs = {interact = true},
 			
 			func = function(name)
-				minetest.show_formspec(name, "adventure_core:store", adv_core.store_formspec(name, 1, "", ""))
+				minetest.show_formspec(name, "adventure_core:store", adv_core.store_formspec(name, 1, "wood", "default:apple"))
 				return true
 			end,
 		})
@@ -66,3 +66,4 @@ end
 			return true
 		end,
 	})
+ 
