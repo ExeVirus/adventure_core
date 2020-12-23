@@ -36,7 +36,7 @@ function adv_core.guide_formspec(name)
     if adv_core.setting("enable_chat_commands",true) then
      table.insert(formspec, "type '/pouch' in chat, or\n")
     end
-    table.insert(formspec, "craft a 'guidebook'.\n")
+    table.insert(formspec, "craft a 'pouch'.\n")
     table.insert(formspec, "<global halign=center>\n There is also a Adventure shop!\n")
     if adv_core.setting("enable_adventure_shop",true) then
      if adv_core.setting("enable_chat_commands",true) then
