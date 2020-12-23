@@ -18,22 +18,17 @@ function adv_core.guide_formspec(name)
 		"bgcolor[#EAD994FF;both;#00000080]",
 		"box[1.12,0.2;6.8,1.2;#00000030]",
 		"image[1.2,0.3;6.6,1;title.png]",
-		"box[2.22,2.49;0.55,0.4;#00000030]", --fire
-		"box[2.82,2.49;0.75,0.4;#00000030]", --water
-		"box[3.63,2.49;0.7,0.4;#00000030]", --earth
-		"box[4.35,2.49;0.41,0.4;#00000030]", --air
-		"image[3.06,4.57;0.5,0.5;fire.png]",
-		"hypertext[0.3,1.5;8.4,9.5;;",
+		"hypertext[0.3,1.5;8.4,9.5;play;",
         "<global halign=center color=#000 size=12 font=Regular>",
         "  -----------   Adventure Core is a discovery mod!   ----------- \n",
-        "<global halign=left>",
+        "<global halign=center>",
         "You are encourged to search far and wide in search of the\n",
         "Four Elements: <style color=#F00> Fire  </style><style color=#00F>Water  </style>",
                         "<style color=#0F0>Earth  </style><style color=#FF0>Air   </style>\n",
         "These elements are found more commonly the futher you wander,\n",
-        "dig, and climb from spawn, and you must be ready for:\n", --This sound
+        "dig, and climb from spawn, and you must be ready for:  <action name=play><style color=#000 size=18>(This Sound)</style></action>-Clickme\n", --This sound
         "When you hear it, an element has just spawned near you!\n",
-        "Look for something like        glowing and floating above the terrain.\n",
+        "Look for something like the image on the right glowing and floating above the terrain.<img name=fire.png float=right width=32 height=32>\n",
         "Click/Punch to capture it, and you have collected a piece of element!\n",
         "To view how much you have collected ", 
     }
@@ -63,7 +58,6 @@ function adv_core.guide_formspec(name)
     end
     table.insert(formspec, "-------------   Happy Adventuring!   -------------")
     table.insert(formspec, "]")
-    table.insert(formspec, "button[6.8,3.5;1.5,0.5;play;TryMe]")
 	return table.concat(formspec, "")
 end
 
@@ -105,7 +99,6 @@ function adv_core.store_formspec(name, page, search, selected)
     local num_objects = adv_core.num_objects
     local num_pages = math.floor(num_objects / 64)+1
     local pouch = adv_core.load_pouch(name)
-    minetest.chat_send_all(minetest.serialize(pouch))
     if page > num_pages then page = num_pages end
     
 	local formspec = {
@@ -124,10 +117,10 @@ function adv_core.store_formspec(name, page, search, selected)
 		"image[0.35,4.6;0.5,0.5;water.png]",
 		"image[0.35,6.0;0.5,0.5;earth.png]",
 		"image[0.35,7.4;0.5,0.5;air.png]",
-        "hypertext[0.3,3.9;1.5,1;;<global halign=left size=16 font=regular color=#F00> ", pouch.fire, "]",
-        "hypertext[0.3,5.3;1.5,1;;<global halign=left size=16 font=regular color=#00F> ", pouch.water, "]",
-        "hypertext[0.3,6.8;1.5,1;;<global halign=left size=16 font=regular color=#0F0> ", pouch.earth, "]",
-        "hypertext[0.3,8.1;1.5,1;;<global halign=left size=16 font=regular color=#FF0> ", pouch.air, "]",
+        "hypertext[0.45,3.9;1.5,1;;<global halign=left size=16 font=regular color=#F00> ", pouch.fire, "]",
+        "hypertext[0.45,5.3;1.5,1;;<global halign=left size=16 font=regular color=#00F> ", pouch.water, "]",
+        "hypertext[0.45,6.8;1.5,1;;<global halign=left size=16 font=regular color=#0F0> ", pouch.earth, "]",
+        "hypertext[0.45,8.1;1.5,1;;<global halign=left size=16 font=regular color=#FF0> ", pouch.air, "]",
 		--Search Bar
 		"field[9.0,10;5,0.6;search;;",search,"]",
         "field_close_on_enter[search;false]",
@@ -136,6 +129,7 @@ function adv_core.store_formspec(name, page, search, selected)
 		--Paging
 		--hypertext element is set based on if search is used
         "field[0,0;0,0;page;;",page,"]",
+		"field[0,0;0,0;selected;;",selected,"]",
 		"image_button[11.3,0.5;0.6,0.6;prev.png;previous_page;]",
 		"image_button[12.3,0.5;0.6,0.6;next.png;next_page;]",
 		}
@@ -174,10 +168,10 @@ function adv_core.store_formspec(name, page, search, selected)
                     formspec[#formspec+1] = ";0.9,0.9;"
                     formspec[#formspec+1] = matched[i]
                     formspec[#formspec+1] = ";"
-                    formspec[#formspec+1] = adv_core.escape_for_formspec(matched[i])
+                    formspec[#formspec+1] = "get_item_"..adv_core.escape_for_formspec(matched[i])
                     formspec[#formspec+1] = ";]"
                     formspec[#formspec+1] = "tooltip["
-                    formspec[#formspec+1] = adv_core.escape_for_formspec(matched[i])
+                    formspec[#formspec+1] = "get_item_"..adv_core.escape_for_formspec(matched[i])
                     formspec[#formspec+1] = ";"
                     formspec[#formspec+1] = matched[i]
                     formspec[#formspec+1] = ";#000;#FFF]"				
@@ -196,9 +190,6 @@ function adv_core.store_formspec(name, page, search, selected)
 					unmatched[#unmatched+1] = object
 				end
 				table.sort(unmatched);
-				for i=1,#unmatched do
-                    minetest.chat_send_all(unmatched[i])
-                end
                 
                 --Display current page
 				for i = (page-1)*64+1, math.min(page*64,#unmatched) do
@@ -214,10 +205,10 @@ function adv_core.store_formspec(name, page, search, selected)
                     formspec[#formspec+1] = ";0.9,0.9;"
 					formspec[#formspec+1] = unmatched[i]
 					formspec[#formspec+1] = ";"
-					formspec[#formspec+1] = adv_core.escape_for_formspec(unmatched[i])
+					formspec[#formspec+1] = "get_item_".. adv_core.escape_for_formspec(unmatched[i])
 					formspec[#formspec+1] = ";]"
                     formspec[#formspec+1] = "tooltip["
-                    formspec[#formspec+1] = adv_core.escape_for_formspec(unmatched[i])
+                    formspec[#formspec+1] = "get_item_".. adv_core.escape_for_formspec(unmatched[i])
                     formspec[#formspec+1] = ";"
                     formspec[#formspec+1] = unmatched[i]
                     formspec[#formspec+1] = ";#000;#FFF]"
@@ -232,7 +223,7 @@ function adv_core.store_formspec(name, page, search, selected)
             formspec[#formspec+1] = selected
             formspec[#formspec+1] = ";;]"
 			--Show Costs
-            formspec[#formspec+1] = "hypertext[1.7,6;7,1;;<global halign=left size=16 font=regular color=#000> Fire: "
+            formspec[#formspec+1] = "hypertext[2,6;7,1;;<global halign=left size=16 font=regular color=#000> Fire: "
             formspec[#formspec+1] = objectTable[selected].fire
             formspec[#formspec+1] = "   Water: "
             formspec[#formspec+1] = objectTable[selected].water
@@ -257,14 +248,47 @@ function adv_core.store_formspec(name, page, search, selected)
 	return table.concat(formspec, "")
 end
 
+
+--For pattern matching
+local function get_item(str)
+	local lstr = string.sub(str,10) --remove any extraneous characters
+	return adv_core.remove_formspec_escapes(lstr) --remove "get_item_"
+end
+
+-- for give command
+local function give(player_name, item)
+	local itemstack = ItemStack(item)
+	if itemstack:is_empty() then
+		return false
+	elseif (not itemstack:is_known()) or (itemstack:get_name() == "unknown") then
+		return false -- "Cannot give an unknown item"
+	-- Forbid giving 'ignore' due to unwanted side effects
+	elseif itemstack:get_name() == "ignore" then
+		return false -- "Giving 'ignore' is not allowed"
+	end
+	local playerref = minetest.get_player_by_name(player_name)
+	--Give to Player
+	local leftover = playerref:get_inventory():add_item("main", itemstack)
+	if not leftover:is_empty() then
+		return false
+	end
+	
+	--take from player
+	local object = adv_core.objectTable[item]
+	adv_core.take_from_player(player_name, object.fire, object.water, object.earth, object.air, false)
+	
+	--play successful sound
+	minetest.sound_play("adv_core_success", { to_player = player_name, gain = 1.0 })
+	return true
+end
+
 -- formspec callbacks
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	local name = player:get_player_name()
-    local page = fields.page or 1
     if formname ~= "adventure_core:store" and formname ~= "adventure_core:guidebook" then
         return
     end
 	if formname == "adventure_core:guidebook" then
+		local name = player:get_player_name()
 		if fields.play then
 			minetest.sound_play("adv_core_spawn_sound", {to_player = name, gain=0.8})
 		end
@@ -272,7 +296,22 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
    		if fields.quit then
             return
         end
+		--setup defaults/hidden fields
+		local name = player:get_player_name()
         local search = fields.search or ""
+		local page = fields.page or 1
+		local current_item = fields.selected or ""
+		--Process "purchases" before changing the selected item
+		if fields.create then
+			if adv_core.player_can_afford_object(name, current_item) then 
+				if give(name, current_item) then
+				else
+					minetest.chat_send_player(name, minetest.colorize(#C11, "AdventureCoreShop: Unable to create that item"))
+				end
+			end
+		end
+		
+		
         if fields.reset_search then
             search = ""
         elseif fields.next_page then
@@ -281,9 +320,15 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
             page = page-1
             page = math.max(1, page)
         end
+		for k, v in pairs(fields) do
+			if k:match("get_item_") then
+				current_item = get_item(k)
+			end
+		end
         if fields.key_enter_field == "search" then
-            minetest.show_formspec(name, "adventure_core:store", adv_core.store_formspec(name, page, search, "default:apple"))
+            minetest.show_formspec(name, "adventure_core:store", adv_core.store_formspec(name, page, search, current_item))
         end
-        minetest.show_formspec(name, "adventure_core:store", adv_core.store_formspec(name, page, search, "default:apple"))
+		
+        minetest.show_formspec(name, "adventure_core:store", adv_core.store_formspec(name, page, search, current_item))
 	end
 end)

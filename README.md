@@ -33,7 +33,7 @@ Without default, the shop can be crafted with the /make_shop command, which requ
 --------
 For both, when a player captures one element, the player gets a small text dialog showing them how much of element they have captured.
 
-Adventure core ships with some built-in nodes a player can craft. 
+Adventure core ships with some built-in nodes a player can create in the shop, as well as a (if enabled) craftable shop node.
 
 Built-in ones, 6 static mesh nodes:
 1. A small bridge

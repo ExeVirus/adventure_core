@@ -3,6 +3,12 @@ for node in pairs(minetest.registered_nodes) do
     adv_core.register_object(node, 0, 0, 1, 1)
 end
 
+--Register Adventure_Shop
+
+--Register craft recipe, if desired.
+
+
+
 
 -- ---Register the round rock
 -- minetest.register_node("rocks:".. name .."_round", {

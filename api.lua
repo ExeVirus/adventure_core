@@ -78,9 +78,10 @@ function adv_core.reward_player(name, fire, water, earth, air, notify)
 		minetest.get_color_escape_sequence("yellow") .. "  Air: "   .. player_pouch.air
 		)
 	end
+	adv_core.mod_storage:set_string(name .. "pouch", minetest.serialize(player_pouch))
 end
 
-function adv_core.take_from_player(name, fire, water, earth, air)
+function adv_core.take_from_player(name, fire, water, earth, air, notify)
 	local player_pouch = adv_core.load_pouch(name)
 	
 	--Don't reduce below zero, that's silly
@@ -103,6 +104,7 @@ function adv_core.take_from_player(name, fire, water, earth, air)
 		minetest.get_color_escape_sequence("yellow") .. "  Air: "   .. player_pouch.air
 		)
 	end
+	adv_core.mod_storage:set_string(name .. "pouch", minetest.serialize(player_pouch))
 end
 
 adv_core.num_objects = 0
