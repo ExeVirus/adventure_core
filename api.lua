@@ -1,4 +1,12 @@
 -- API
+function adv_core.check_pouch(name)
+	local pouch = minetest.deserialize(adv_core.mod_storage:get_string(tostring(name) .. "pouch"))
+	if pouch == nil then
+		return false
+	else 
+		return true
+	end
+end
 
 function adv_core.load_pouch(name)
 	local pouch = minetest.deserialize(adv_core.mod_storage:get_string(tostring(name) .. "pouch"))
@@ -43,11 +51,15 @@ end
 function adv_core.player_can_afford(name, fire, water, earth, air)
 	--load player pouch
     local player_pouch = adv_core.load_pouch(name)
+	fire = tonumber(fire) or 0
+	water = tonumber(water) or 0
+	earth = tonumber(earth) or 0
+	air = tonumber(air) or 0
 	
-	local fire_ok  = player_pouch.fire  >= fire
-	local water_ok = player_pouch.water >= water
-	local earth_ok = player_pouch.earth >= earth
-	local water_ok = player_pouch.air   >= air
+	local fire_ok  = (player_pouch.fire  >= fire)
+	local water_ok = (player_pouch.water >= water)
+	local earth_ok = (player_pouch.earth >= earth)
+	local air_ok = (player_pouch.air   >= air)
 	
 	if fire_ok and water_ok and earth_ok and air_ok then
 		return true
@@ -58,7 +70,15 @@ end
 -- (reward player with elements, pay with elements, register nodes to purchase for shop)
 
 function adv_core.reward_player(name, fire, water, earth, air, notify)
+	if name == nil then
+		return false
+	end
 	local player_pouch = adv_core.load_pouch(name)
+	fire = fire or 0
+	water = water or 0
+	earth = earth or 0
+	air = air or 0
+	notify = notify or true
 	
 	player_pouch.fire  = player_pouch.fire  + fire
 	player_pouch.water = player_pouch.water + water
@@ -67,11 +87,11 @@ function adv_core.reward_player(name, fire, water, earth, air, notify)
 
 	if notify then
 		--notify player:
-		minetest.chat_send_player(player_name, 
+		minetest.chat_send_player(minetest.get_color_escape_sequence("green") .. name, 
 			"You've been rewarded elemental essence!"
 		)
 		
-		minetest.chat_send_player(player_name, 
+		minetest.chat_send_player(name, 
 		minetest.get_color_escape_sequence("red") .. "Fire: "    .. player_pouch.fire  ..
 		minetest.get_color_escape_sequence("blue") .. "  Water: " .. player_pouch.water ..
 		minetest.get_color_escape_sequence("green") .. "  Earth: " .. player_pouch.earth ..
@@ -93,11 +113,11 @@ function adv_core.take_from_player(name, fire, water, earth, air, notify)
 
 	if notify then
 		--notify player:
-		minetest.chat_send_player(player_name, 
+		minetest.chat_send_player(name, 
 			"Elemental essence taken!"
 		)
 		
-		minetest.chat_send_player(player_name, 
+		minetest.chat_send_player(name, 
 		minetest.get_color_escape_sequence("red") .. "Fire: "    .. player_pouch.fire  ..
 		minetest.get_color_escape_sequence("blue") .. "  Water: " .. player_pouch.water ..
 		minetest.get_color_escape_sequence("green") .. "  Earth: " .. player_pouch.earth ..

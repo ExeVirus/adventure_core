@@ -6,31 +6,30 @@
 -- Aventure Core Mod by ExeVirus
 -- Font used in title: Graceful
 --
--- See https://github.com/ExeVirus/adventure_core/wiki for more information
 
 adv_core={} --contains all functions and global variables
 adv_core.mod_storage = minetest.get_mod_storage()
 
--- Settings
+-- Settings   98% DONE
 dofile(minetest.get_modpath("adventure_core").."/settings.lua")
 
--- Register the element entities
+-- Register the element entities   DONE
 dofile(minetest.get_modpath("adventure_core").."/elements.lua")
 
--- API for this and other mods
--- (reward player with elements, pay with elements, register nodes to purchase for shop, etc.)
+-- API for this and other mods  DONE
+-- (reward player with elements, pay with elements, **register nodes to purchase in shop**, etc.)
 dofile(minetest.get_modpath("adventure_core").."/api.lua")
 
--- Formspecs (guide,store,pouch)
+-- Formspecs (guide,store,pouch)  DONE
 dofile(minetest.get_modpath("adventure_core").."/formspecs.lua")
 
--- Register the Built-in Nodes
+-- Register the Built-in Nodes  DONE
 dofile(minetest.get_modpath("adventure_core").."/register.lua")
 
--- Spawning, including player spawning items
+-- Spawning, including player spawning items  85% DONE
 dofile(minetest.get_modpath("adventure_core").."/spawning.lua")
 
--- Chat Commands
+-- Chat Commands  DONE
 dofile(minetest.get_modpath("adventure_core").."/chat_commands.lua")
 
 

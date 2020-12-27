@@ -9,20 +9,19 @@
 --					--------------------------------
 
 --Returns true on success, false on failure
-local time_between = adv_core.setting("base_time_between_spawns", 80)
-local spread	   = adv_core.setting("spawn_time_spread", 15)
+local time_between = adv_core.setting("base_time_between_spawns", 80) * 1000000
+local spread	   = adv_core.setting("spawn_time_spread", 15) * 1000000
 local base_dist    = adv_core.setting("base_distance", 500)
-local spawn_adjust = adv_core.setting("spawn_adjustment_time", 180)
-local dist_adjust  = adv_core.setting("distance_adjustment_time", 2)
-local min_time     = adv_core.setting("minimum_spawn_time", 30)
+local spawn_adjust = adv_core.setting("spawn_adjustment_time", 180) * 1000000
+local dist_adjust  = adv_core.setting("distance_adjustment_time", 2) * 1000000
+local min_time     = adv_core.setting("minimum_spawn_time", 30) * 1000000
 local spawn_point  = adv_core.setting("spawn_location",{x=0,y=0,z=0})
 local biome_spawns = adv_core.setting("enable_spawn_biome", true)
 local spawn_dist   = adv_core.setting("distance_from_player", 12)
 local default_en   = (minetest.get_modpath("default")) ~= nil
 local air_id       = minetest.get_content_id("air")
 local ignore_id    = minetest.get_content_id("ignore")
---local init_time    = (time_between + spawn_adjust) * 1000000
-local init_time = 1000000
+local init_time    = (time_between + spawn_adjust)
 
 --Used to randomly spawn element near a player
 local function spawn_element(player, with_biomes)
@@ -62,7 +61,6 @@ local function spawn_element(player, with_biomes)
 	position.y = math.floor(position.y + math.random(0 , 10))
 	
 	if (minetest.get_node(position).name == "air") then
-		minetest.chat_send_all("starting: ".. minetest.serialize(position))
 		--find lowest node that's not air
 		local vm         = minetest.get_voxel_manip()
 		local position2 = position
@@ -80,7 +78,6 @@ local function spawn_element(player, with_biomes)
 				position.y = y+3
 				if with_biomes then
 					biome_spawn(minetest.get_biome_data(position), position)
-					minetest.chat_send_all("ending: " .. minetest.serialize(position))
 				else
 					random_spawn(position)
 				end
@@ -91,7 +88,6 @@ local function spawn_element(player, with_biomes)
 		position.y = position.y - 7
 		if with_biomes then
 			biome_spawn(minetest.get_biome_data(position), position)
-			minetest.chat_send_all("ending: " .. minetest.serialize(position))
 		else
 			random_spawn(position)
 		end
@@ -115,10 +111,8 @@ minetest.register_globalstep(function(dtime)
 				player_old_time = new_time
 			end
 			local player_countdown = tonumber(adv_core.mod_storage:get_string(name .. "countdown")) or init_time
-			minetest.chat_send_all("old_time: " .. player_old_time .. "countdown: " .. player_countdown)
 			
 			if player_old_time + player_countdown < new_time then
-				minetest.chat_send_all("attempting spawn")
 				local spawned = nil
 				if biome_spawns and default_en then
 					spawned = spawn_element(player, true)
@@ -126,7 +120,6 @@ minetest.register_globalstep(function(dtime)
 					spawned = spawn_element(player, false)
 				end
 				if spawned then
-					minetest.chat_send_all("spawn_successful")
 					local countdown = time_between + math.random(-spread,spread)
 					local dist = vector.distance(player:get_pos(), spawn_point)
 					if dist > base_dist then
@@ -134,10 +127,10 @@ minetest.register_globalstep(function(dtime)
 					else
 						countdown = countdown + spawn_adjust
 					end
-					adv_core.mod_storage:set_string(name .. "countdown", 3000000)--math.max(countdown, min_time) * 1000000)
+					adv_core.mod_storage:set_string(name .. "countdown", math.max(min_time, countdown)) --math.max(countdown, min_time) * 1000000)
 				else
 					minetest.chat_send_all("spawn_unsuccessful")
-					adv_core.mod_storage:set_string(name .. "countdown", 1000000) -- try again in 1 seconds...
+					adv_core.mod_storage:set_string(name .. "countdown", 2000000) -- try again in 2 seconds...
 				end
 				adv_core.mod_storage:set_string(name .. "old_time", new_time)
 			end
@@ -145,22 +138,47 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
--- --Do players respawn/spawn with a guidebook and pouch?
--- if adv_core.setting("enable_starting_items", true) then
-	-- minetest.register_on_newplayer(function(playerRef)
-		-- local inv = player:get_inventory()
-		-- local main = inv:get_list("main")
-		-- --for loop through main stacks
-			-- --check if empty
-				-- --add guidebook
-				-- --break
-		-- --for loop though main stacks
-			-- --check if empty
-				-- --add pouch
-				-- --break
-	-- end
-	-- )
--- end
+minetest.register_on_joinplayer(function(ObjectRef, last_login)
+    local name = ObjectRef:get_player_name()
+    if name == nil then
+        return
+    end
+    adv_core.mod_storage:set_string(name .. "countdown", init_time)
+    adv_core.mod_storage:set_string(name .. "old_time", minetest.get_us_time())  
+end
+)
+
+--Do players start with a guidebook and pouch?
+if adv_core.setting("enable_starting_items", true) then
+	
+	-- for give command
+	local function give(player_name, item)
+		local itemstack = ItemStack(item)
+		if itemstack:is_empty() then
+			return false
+		elseif (not itemstack:is_known()) or (itemstack:get_name() == "unknown") then
+			return false -- "Cannot give an unknown item"
+		-- Forbid giving 'ignore' due to unwanted side effects
+		elseif itemstack:get_name() == "ignore" then
+			return false -- "Giving 'ignore' is not allowed"
+		end
+		local playerref = minetest.get_player_by_name(player_name)
+		--Give to Player
+		local leftover = playerref:get_inventory():add_item("main", itemstack)
+		if not leftover:is_empty() then
+			return false
+		end
+		
+		return true
+	end
+	
+	minetest.register_on_newplayer(
+		function(player)
+			give(player:get_player_name(), "adventure_core:guidebook")
+			give(player:get_player_name(), "adventure_core:pouch")
+		end
+	)
+end
 
 
 

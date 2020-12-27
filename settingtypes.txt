@@ -7,7 +7,7 @@ adventure_core.spawn_location (Spawn Location) v3f (0.0, 0.0, 0.0)
 adventure_core.enable_adventure_shop (Craftable Adventure Shop) bool true
 
 #Enable or disable the chat command for generating adventure_shop
-adventure_core.enable_adventure_shop_chat_build (Chat Command Build Adventure Shop) bool true
+adventure_core.enable_adventure_shop_chat_build (Chat Command Build the Adventure Shop) bool true
 
 #Enable or disable the chat command to browse shop directly
 adventure_core.enable_adventure_shop_chat (Chat Command View Adventure Shop) bool false
