@@ -8,7 +8,7 @@ function adv_core.setting(setting, default)
 			return read
 		end
 	elseif type(default) == "string" then
-		return minetest.settings:get("adventure_core."..setting) or default
+		return tostring(minetest.settings:get("adventure_core."..setting)) or default
 	elseif type(default) == "number" then
 		return tonumber(minetest.settings:get("adventure_core."..setting) or default)
 	elseif type(default) == "table" then

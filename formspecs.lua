@@ -4,7 +4,7 @@ local red    = minetest.get_color_escape_sequence("red")
 local blue   = minetest.get_color_escape_sequence("blue")
 local green  = minetest.get_color_escape_sequence("green")	
 local yellow = minetest.get_color_escape_sequence("yellow")
-local black = minetest.get_color_escape_sequence("#111111")
+local black  = minetest.get_color_escape_sequence("#111111")
 
 -- Guidebook formspec (with or without default)
 function adv_core.guide_formspec(name)
@@ -111,16 +111,16 @@ function adv_core.store_formspec(name, page, search, selected)
 		"bgcolor[#866f4c;both;#00000080]",
 		"box[0.2,0.2;15.6,11.6;#dec29cFF]",
 		--pouch
-		"box[0.3,2.4;0.6,6.6;#564222FF]",
-		"image[0.4,2.6;0.4,0.4;pouch.png]",
-		"image[0.35,3.2;0.5,0.5;fire.png]",
-		"image[0.35,4.6;0.5,0.5;water.png]",
-		"image[0.35,6.0;0.5,0.5;earth.png]",
-		"image[0.35,7.4;0.5,0.5;air.png]",
-        "hypertext[0.45,3.9;1.5,1;;<global halign=left size=16 font=regular color=#F00> ", pouch.fire, "]",
-        "hypertext[0.45,5.3;1.5,1;;<global halign=left size=16 font=regular color=#00F> ", pouch.water, "]",
-        "hypertext[0.45,6.8;1.5,1;;<global halign=left size=16 font=regular color=#0F0> ", pouch.earth, "]",
-        "hypertext[0.45,8.1;1.5,1;;<global halign=left size=16 font=regular color=#FF0> ", pouch.air, "]",
+		"box[0.3,2.4;0.7,6.6;#564222FF]",
+		"image[0.42,2.6;0.4,0.4;pouch.png]",
+		"image[0.38,3.2;0.5,0.5;fire.png]",
+		"image[0.38,4.6;0.5,0.5;water.png]",
+		"image[0.38,6.0;0.5,0.5;earth.png]",
+		"image[0.38,7.4;0.5,0.5;air.png]",
+        "hypertext[0.38,3.9;1.5,1;;<global halign=left size=16 font=regular color=#F00> ", pouch.fire, "]",
+        "hypertext[0.38,5.3;1.5,1;;<global halign=left size=16 font=regular color=#00F> ", pouch.water, "]",
+        "hypertext[0.38,6.8;1.5,1;;<global halign=left size=16 font=regular color=#0F0> ", pouch.earth, "]",
+        "hypertext[0.38,8.1;1.5,1;;<global halign=left size=16 font=regular color=#FF0> ", pouch.air, "]",
 		--Search Bar
 		"field[9.0,10;5,0.6;search;;",search,"]",
         "field_close_on_enter[search;false]",
@@ -219,11 +219,14 @@ function adv_core.store_formspec(name, page, search, selected)
 		--Selected Item Display
 	    if selected ~= nil and selected ~= "" then
             --show item
-            formspec[#formspec+1] = "item_image_button[2,2;4,4;"
+			formspec[#formspec+1] = "hypertext[1.5,1.8;5,1;;<global halign=center size=18 color=#000>"
+			formspec[#formspec+1] = minetest.registered_nodes[selected].description or selected
+			formspec[#formspec+1] = "]"
+            formspec[#formspec+1] = "item_image_button[2,2.8;4,4;"
             formspec[#formspec+1] = selected
             formspec[#formspec+1] = ";;]"
 			--Show Costs
-            formspec[#formspec+1] = "hypertext[2,6;7,1;;<global halign=left size=16 font=regular color=#000> Fire: "
+            formspec[#formspec+1] = "hypertext[1.5,6.8;7,1;;<global halign=left size=16 font=regular color=#000> Fire: "
             formspec[#formspec+1] = objectTable[selected].fire
             formspec[#formspec+1] = "   Water: "
             formspec[#formspec+1] = objectTable[selected].water
@@ -234,10 +237,10 @@ function adv_core.store_formspec(name, page, search, selected)
             formspec[#formspec+1] = "]"
 			--Show "Create" button
             if adv_core.player_can_afford_object(name, selected) then
-                formspec[#formspec+1] = "button[3,7;2,1.5;create;Create]"
+                formspec[#formspec+1] = "button[3,7.8;2,1.5;create;Create]"
             else
-                formspec[#formspec+1] = "button[2,7;4,1.5;;Can't Afford]"
-                formspec[#formspec+1] = "box[2,7;4,1.5;#8008]"
+                formspec[#formspec+1] = "button[2,7.8;4,1.5;;Can't Afford]"
+                formspec[#formspec+1] = "box[2,7.8;4,1.5;#8008]"
             end
 		end
     
@@ -278,7 +281,7 @@ local function give(player_name, item)
 	adv_core.take_from_player(player_name, object.fire, object.water, object.earth, object.air, false)
 	
 	--play successful sound
-	minetest.sound_play("adv_core_success", { to_player = player_name, gain = 1.0 })
+	minetest.sound_play("adv_core_success", { to_player = player_name, gain = 0.3 })
 	return true
 end
 
