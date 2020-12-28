@@ -25,6 +25,9 @@ All players can (via a setting) start with the guidebook, and pouch. One explain
 
 
 ## Pouch and Guidebook
+The pouch allwos a player to view their current stash of elemental essence.
+
+The Guidebook is an in-game simple guide to adventure_core
 
 
 #### If default (minetest game) is present:
