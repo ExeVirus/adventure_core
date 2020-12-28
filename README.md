@@ -1,4 +1,5 @@
-# adventure_core WIP
+# adventure_core
+![Aventure Core Screenshot](screenshot.png)
 A Minetest Core Adventure Mod 
 
 Explainations are better left for the mod:
