@@ -72,9 +72,9 @@ if adv_core.setting("enable_builtin_nodes", true) then
 			fixed = bridgeboxes
 		},
 		tiles = {"bridge.jpg"},
-		groups = {cracky=2},
+		groups = {oddly_breakable_by_hand=2},
 	})
-
+	
 	minetest.register_node("adventure_core:bonzai", {
 		description = "Bonzai",
 		drawtype = "mesh",
@@ -89,28 +89,9 @@ if adv_core.setting("enable_builtin_nodes", true) then
 			type = "fixed", 
 			fixed = {-0.4,-0.4,-0.4,0.4,0.4,0.4},
 		},
-		tiles = {"leaf.png", "wood.jpg"},
-		inventory_image = "bonzai_inv.png",
-		groups = {cracky=2},
-	})
-	
-	minetest.register_node("adventure_core:bonzai2", {
-		description = "Bonzai 2",
-		drawtype = "mesh",
-		mesh = "bonzai2.obj",
-		sunlight_propagates = true,
-		paramtype2 = "facedir",
-		collision_box = {
-			type = "fixed", 
-			fixed = {-0.4,-0.4,-0.4,0.4,0.4,0.4},
-		},
-		selection_box = {
-			type = "fixed", 
-			fixed = {-0.4,-0.4,-0.4,0.4,0.4,0.4},
-		},
 		tiles = {"wood.jpg", "leaf.png"},
 		inventory_image = "bonzai_inv.png",
-		groups = {cracky=2},
+		groups = {oddly_breakable_by_hand=2},
 	})
 
 	minetest.register_node("adventure_core:rune", {
@@ -128,7 +109,7 @@ if adv_core.setting("enable_builtin_nodes", true) then
 			fixed = {{0.895, -0.455, -0.785, -0.865, -0.015, 0.645},{0.235, -0.015, -0.235, -0.205, 1.195, 0.095},},
 		},
 		tiles = {"rune.png"},
-		groups = {cracky=2},
+		groups = {oddly_breakable_by_hand=2},
 	})
 
 	minetest.register_node("adventure_core:campfire", {
@@ -153,7 +134,7 @@ if adv_core.setting("enable_builtin_nodes", true) then
 		},
 		inventory_image = "campfire_inv.png",
 			-- Full loop length},
-		groups = {cracky=2},
+		groups = {oddly_breakable_by_hand=2},
 	})
 
 	minetest.register_node("adventure_core:flag", {
@@ -172,7 +153,7 @@ if adv_core.setting("enable_builtin_nodes", true) then
 		},
 		tiles = {"blue.png","grey.png"},
 		inventory_image = "flag_inv.png",
-		groups = {cracky=2},
+		groups = {oddly_breakable_by_hand=2},
 	})
 
 	minetest.register_node("adventure_core:axe_stump", {
