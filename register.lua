@@ -108,7 +108,7 @@ if adv_core.setting("enable_builtin_nodes", true) then
 			type = "fixed", 
 			fixed = {{0.895, -0.455, -0.785, -0.865, -0.015, 0.645},{0.235, -0.015, -0.235, -0.205, 1.195, 0.095},},
 		},
-		tiles = {"rune.png"},
+		tiles = {"rune.jpg"},
 		groups = {oddly_breakable_by_hand=2},
 	})
 
@@ -170,7 +170,7 @@ if adv_core.setting("enable_builtin_nodes", true) then
 			type = "fixed", 
 			fixed = {-0.4,-0.5,-0.4,0.4,0.42,0.4},
 		},
-		tiles = {"axe_stump.png"},
+		tiles = {"axe_stump.jpg"},
 		groups = {oddly_breakable_by_hand=2},
 	})
 
