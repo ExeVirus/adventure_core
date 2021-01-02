@@ -129,7 +129,6 @@ minetest.register_globalstep(function(dtime)
 					end
 					adv_core.mod_storage:set_string(name .. "countdown", math.max(min_time, countdown)) --math.max(countdown, min_time) * 1000000)
 				else
-					minetest.chat_send_all("spawn_unsuccessful")
 					adv_core.mod_storage:set_string(name .. "countdown", 2000000) -- try again in 2 seconds...
 				end
 				adv_core.mod_storage:set_string(name .. "old_time", new_time)
