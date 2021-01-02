@@ -95,7 +95,7 @@ local fire_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			self.particles = create_particles(self.object:get_pos(), "fire")
 		end
-		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
+		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.9, max_hear_distance=80, loop = false})
 		self.lifetime = minetest.get_us_time() + adv_core.setting("element_lifetime", 60)*1000000
 	end,
 	
@@ -152,7 +152,7 @@ local water_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			self.particles = create_particles(self.object:get_pos(), "water")
 		end
-		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
+		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.9, max_hear_distance=80, loop = false})
 		self.lifetime = minetest.get_us_time() + adv_core.setting("element_lifetime", 60)*1000000
 	end,
 	
@@ -209,7 +209,7 @@ local earth_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			self.particles = create_particles(self.object:get_pos(), "earth")
 		end
-		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
+		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.9, max_hear_distance=80, loop = false})
 		self.lifetime = minetest.get_us_time() + adv_core.setting("element_lifetime", 60)*1000000
 	end,
 	
@@ -267,7 +267,7 @@ local air_element_def = {
 		if adv_core.setting("enable_element_particles", true) then
 			self.particles = create_particles(self.object:get_pos(), "air")
 		end
-		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.5, max_hear_distance=80, loop = false})
+		self.sound = minetest.sound_play("adv_core_spawn_sound", {object = self.object, gain=0.9, max_hear_distance=80, loop = false})
 		self.lifetime = minetest.get_us_time() + adv_core.setting("element_lifetime", 60)*1000000
 	end,
 	

@@ -34,7 +34,7 @@ adventure_core.enable_starting_items (Enable Starting Items) bool true
 adventure_core.enable_builtin_nodes (Enable Builtin Nodes) bool true
 
 #Base time between element spawns in seconds. Per player value. [40-3600]
-adventure_core.base_time_between_spawns (Base Time Between Spawns) int 80 40 3600
+adventure_core.base_time_between_spawns (Base Time Between Spawns) int 60 30 3600
 
 #Time Spread between element spawns, in seconds, randomly between (-value, +value) [0-30]
 adventure_core.spawn_time_spread (Time Spread Between Spawns) int 15 0 30

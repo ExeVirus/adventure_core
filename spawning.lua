@@ -9,7 +9,7 @@
 --					--------------------------------
 
 --Returns true on success, false on failure
-local time_between = adv_core.setting("base_time_between_spawns", 80) * 1000000
+local time_between = adv_core.setting("base_time_between_spawns", 60) * 1000000
 local spread	   = adv_core.setting("spawn_time_spread", 15) * 1000000
 local base_dist    = adv_core.setting("base_distance", 500)
 local spawn_adjust = adv_core.setting("spawn_adjustment_time", 180) * 1000000
